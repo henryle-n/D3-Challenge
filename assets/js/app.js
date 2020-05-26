@@ -1,5 +1,4 @@
-// Step 1 Variables
-// Set variables
+// ========== DECLARE VARIABLES =================
 
 var svgWidth;
 var svgHeight;
@@ -10,7 +9,8 @@ var svg;
 var chartGroup;
 var transDura = 800; // unit = ms
 
-
+// ============== SVG CREATTION ==================
+// get current user window size for svg scaling
 svgWidth = window.innerWidth;;
 svgHeight = window.innerHeight;
 
@@ -21,15 +21,11 @@ margin = {
   left: 124
   };
 
-
 width = svgWidth - margin.left - margin.right;
 height = svgHeight - margin.top - margin.bottom;
 
 
-// Step 2: Create an SVG wrapper,
-// append an SVG group that will hold our chart,
-// and shift the latter by left and top margins.
-// =================================
+// create svg wrapper 
 var svgArea = d3.select("body").select("#scatter");
 
 if (!svgArea.empty()) {
@@ -41,48 +37,73 @@ svgArea
 .attr("width", svgWidth)
 .attr("height", svgHeight);
 
+// shift the svg area to specified parameters
 chartGroup = svg.append("g")
 .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
-// Initial Params
-var chosenXaxis = "hair_length";
-var chosenYaxis = 
+// initial chosen axes upon page loading
+var chosenXaxis = "poverty";
+var chosenYaxis = "healthcare";
 
-// function used for updating x-scale var upon click on X_axis label
-function xScale(hairData, chosenXaxis) {
+// =============== SCALING AXES =================
+function xScale(demoData, chosenXaxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
     // scale so that min of the axis is 20% extended beyond original data
     // max is 20% more than original
-    .domain([d3.min(hairData, d => d[chosenXaxis]) * 0.3,
-      d3.max(hairData, d => d[chosenXaxis]) * 1.5
+    .domain([d3.min(demoData, d => d[chosenXaxis]) * 0.3,
+      d3.max(demoData, d => d[chosenXaxis]) * 1.5
     ])
     .range([0, width]);
   return xLinearScale;
 }
 
-// function used for updating xAxis var upon click on axis label
-function renderAxes(newXScale, xAxis) {
-  var bottomAxis = d3.axisBottom(newXScale);
+// function used for updating y-scale var upon click on yAxis label
+function yScale(demoData, chosenYaxis) {
+  // create scales
+  var yLinearScale = d3.scaleLinear()
+    // scale so that min of the axis is 20% extended beyond original data
+    // max is 20% more than original
+    .domain([d3.min(demoData, d => d[chosenYaxis]) * 0.3,
+      d3.max(demoData, d => d[chosenYaxis]) * 1.5
+    ])
+    .range([height, 0]);
+  return yLinearScale;
+}
+
+// =============== UPDATING CURRENT AXES =================
+function renderXaxes(newXscale, xAxis) {
+  var bottomAxis = d3.axisBottom(newXscale);
   xAxis.transition()
     .duration(transDura)
     .call(bottomAxis);
   return xAxis;
 }
 
-// function used for updating circles group with a transition to
-// new circles -- THIS IS ONLY FOR "X-AXIS"
-function renderCircles(circlesGroup, newXScale, chosenXAxis) {
+function renderAxes(newYscale, yAxis) {
+  var leftAxis = d3.axisLeft(newYscale);
+  yAxis.transition()
+    .duration(transDura)
+    .call(leftAxis);
+  return yAxis;
+}
+
+// ================= RENDERING CIRCLES ===================
+
+// create/ update circular data points on graph
+function renderCircles(circlesGroup, newXscale, newYscale, chosenXaxis, chosenYaxis) {
 
   circlesGroup.transition()
     .duration(transDura)
-    .attr("cx", d => newXScale(d[chosenXAxis]));
-
+    .attr("cx", d => newXscale(d[chosenXaxis]))
+    .attr("cy", d => newYscale(d[chosenYaxis]));
   return circlesGroup;
 }
 
-// function used for updating circles group with new tooltip
+
+
+// update tooltip for circles
 function updateToolTip(chosenXAxis, circlesGroup) {
 
   var label;
