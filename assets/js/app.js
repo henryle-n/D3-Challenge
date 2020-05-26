@@ -28,9 +28,9 @@ height = svgHeight - margin.top - margin.bottom;
 // create svg wrapper 
 var svgArea = d3.select("body").select("#scatter");
 
-if (!svgArea.empty()) {
-svgArea.remove();
-}
+// if (!svgArea.empty()) {
+// svgArea.remove();
+// }
 
 svgArea
 .append("svg")
@@ -38,7 +38,7 @@ svgArea
 .attr("height", svgHeight);
 
 // shift the svg area to specified parameters
-chartGroup = svg.append("g")
+chartGroup = d3.select("svg").append("g")
 .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
@@ -52,8 +52,9 @@ function xScale(demoData, chosenXaxis) {
   var xLinearScale = d3.scaleLinear()
     // scale so that min of the axis is 20% extended beyond original data
     // max is 20% more than original
-    .domain([d3.min(demoData, d => d[chosenXaxis]) * 0.3,
-      d3.max(demoData, d => d[chosenXaxis]) * 1.5
+    .domain([
+      d3.min(demoData, d => d[chosenXaxis]) * 0.9,
+      d3.max(demoData, d => d[chosenXaxis]) * 1.1
     ])
     .range([0, width]);
   return xLinearScale;
@@ -65,8 +66,9 @@ function yScale(demoData, chosenYaxis) {
   var yLinearScale = d3.scaleLinear()
     // scale so that min of the axis is 20% extended beyond original data
     // max is 20% more than original
-    .domain([d3.min(demoData, d => d[chosenYaxis]) * 0.3,
-      d3.max(demoData, d => d[chosenYaxis]) * 1.5
+    .domain([
+      d3.min(demoData, d => d[chosenYaxis]) * 0.9,
+      d3.max(demoData, d => d[chosenYaxis]) * 1.1
     ])
     .range([height, 0]);
   return yLinearScale;
@@ -143,7 +145,7 @@ function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
       break;
   }
 
-  // if (chosenXAxis === "hair_length") {
+  // if (chosenXaxis === "hair_length") {
   //   label = "Hair Length:";
   // }
   // else {
@@ -152,7 +154,7 @@ function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
 
   var toolTip = d3.tip()
     .attr("class", "tooltip")
-    .offset([80, -60])
+    .offset([0, 0])
     .html(function(row) {
       return (`
         ${row['state']}<hr>
@@ -220,7 +222,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXaxis]))
-    .attr("cx", d => yLinearScale(d[chosenYaxis]))
+    .attr("cy", d => yLinearScale(d[chosenYaxis]))
     .attr("r", 10)
     .attr("fill", "blue")
     .attr("opacity", ".8");
@@ -281,7 +283,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
 
 
   // updateToolTip function above csv import
-  var circlesGroup = updateToolTip(chosenXaxis, chosenYaxis, circlesGroup)
+  var circlesGroup = updateToolTip(chosenXaxis, chosenYaxis, circlesGroup);
   
 
   // x axis labels event listener
@@ -291,7 +293,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
       var value = d3.select(this).attr("value");
       if (value !== chosenXaxis) {
 
-        // replaces chosenXAxis with value
+        // replaces chosenXaxis with value
         chosenXaxis = value;
 
         console.log(chosenXaxis)
@@ -305,7 +307,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
         yAxis = renderYaxis(yLinearScale, yAxis);
 
         // updates circles with new x values
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYaxis);
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXaxis, chosenYaxis);
 
         // updates tooltips with new info
         circlesGroup = updateToolTip(chosenXaxis, chosenYaxis, circlesGroup);
@@ -355,7 +357,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
       var value = d3.select(this).attr("value");
       if (value !== chosenYaxis) {
 
-        // replaces chosenXAxis with value
+        // replaces chosenXaxis with value
         chosenYaxis = value;
 
         console.log(chosenYaxis)
@@ -369,7 +371,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
         yAxis = renderYaxis(yLinearScale, yAxis);
 
         // updates circles with new x values
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYaxis);
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXaxis, chosenYaxis);
 
         // updates tooltips with new info
         circlesGroup = updateToolTip(chosenXaxis, chosenYaxis, circlesGroup);
