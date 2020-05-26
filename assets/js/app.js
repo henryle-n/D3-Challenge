@@ -7,6 +7,9 @@ d3.csv("assets/data/data.csv").then(function(data) {
         row.poverty = +row.poverty;
         row.income = +row.income;
         row.healthcare = + row.healthcare;
+        row.obesity = + row.obesity;
+        row.smokes = + row.smokes;
+        row.age = + row.age;
     });
 
     // Step 1 Variables
@@ -49,7 +52,6 @@ d3.csv("assets/data/data.csv").then(function(data) {
     .append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
-
     chartGroup = svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
