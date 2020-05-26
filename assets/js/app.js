@@ -73,7 +73,7 @@ function yScale(demoData, chosenYaxis) {
 }
 
 // =============== UPDATING CURRENT AXES =================
-function renderXaxes(newXscale, xAxis) {
+function renderXaxis(newXscale, xAxis) {
   var bottomAxis = d3.axisBottom(newXscale);
   xAxis.transition()
     .duration(transDura)
@@ -81,7 +81,7 @@ function renderXaxes(newXscale, xAxis) {
   return xAxis;
 }
 
-function renderYaxes(newYscale, yAxis) {
+function renderYaxis(newYscale, yAxis) {
   var leftAxis = d3.axisLeft(newYscale);
   yAxis.transition()
     .duration(transDura)
@@ -295,15 +295,16 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
 
         console.log(chosenXaxis)
 
-        // functions here found above csv import
-        // updates x scale for new data
+        // updates x & y scale for new data
         xLinearScale = xScale(demoData, chosenXaxis);
+        yLinearScale = yScale(demoData, chosenYaxis);
 
         // updates x axis with transition
-        xAxis = renderAxes(xLinearScale, xAxis);
+        xAxis = renderXaxis(xLinearScale, xAxis);
+        yAxis = renderYaxis(yLinearScale, yAxis);
 
         // updates circles with new x values
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYaxis);
 
         // updates tooltips with new info
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
