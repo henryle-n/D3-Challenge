@@ -263,21 +263,21 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     // add text label to the labelsGroup
   var healthCareLabel = labelsGroupY.append("text")
     .attr("y", `${-labelStartPos}rem`)
-    .attr("value", "healthCare") // value to grab for event listener
+    .attr("value", "healthcare") // value to grab for event listener
     .classed("active", true)
     .text("Lacks Healthcare (%)");
   
-  var smokeLabel = labelsGroupY.append("text")
+  var smokesLabel = labelsGroupY.append("text")
     .attr("y", `${-labelStartPos - labelSpacing}rem`)
-    .attr("value", "smoke") // value to grab for event listener
+    .attr("value", "smokes") // value to grab for event listener
     .classed("inactive", true)
     .text("Smokes (%)");
     
-  var obesseLabel = labelsGroupY.append("text")
+  var obesityLabel = labelsGroupY.append("text")
     .attr("y", `${-labelStartPos - 2*labelSpacing}rem`)
-    .attr("value", "obesse") // value to grab for event listener
+    .attr("value", "obesity") // value to grab for event listener
     .classed("inactive", true)
-    .text("Obesse (%)");
+    .text("Obesity (%)");
 
 
   // updateToolTip function above csv import
@@ -289,7 +289,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .on("click", function() {
       // get value of selection
       var value = d3.select(this).attr("value");
-      if (value !== chosenXAxis) {
+      if (value !== chosenXaxis) {
 
         // replaces chosenXAxis with value
         chosenXaxis = value;
@@ -348,32 +348,70 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
         }
       }
     });
+
+    labelsGroupY.selectAll("text")
+    .on("click", function() {
+      // get value of selection
+      var value = d3.select(this).attr("value");
+      if (value !== chosenYaxis) {
+
+        // replaces chosenXAxis with value
+        chosenYaxis = value;
+
+        console.log(chosenYaxis)
+
+        // updates x & y scale for new data
+        xLinearScale = xScale(demoData, chosenXaxis);
+        yLinearScale = yScale(demoData, chosenYaxis);
+
+        // updates x axis with transition
+        xAxis = renderXaxis(xLinearScale, xAxis);
+        yAxis = renderYaxis(yLinearScale, yAxis);
+
+        // updates circles with new x values
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYaxis);
+
+        // updates tooltips with new info
+        circlesGroup = updateToolTip(chosenXaxis, chosenYaxis, circlesGroup);
+
+        // changes classes to change bold text
+        if (chosenYaxis === "healthcare") {
+          healthCareLabel
+            .classed("active", true)
+            .classed("inactive", false);
+          smokesLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          obesityLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+        
+        else if (chosenYaxis === "smokes") {
+          healthCareLabel
+            .classed("active", false)
+            .classed("inactive", true);
+            obesityLabel
+            .classed("active", false)
+            .classed("inactive", true);
+            smokesLabel
+            .classed("active", true)
+            .classed("inactive", false);
+        }
+
+        else {
+          healthCareLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          smokesLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          obesityLabel
+            .classed("active", true)
+            .classed("inactive", false);
+        }
+      }
+    });
 }).catch(function(error) {
   console.log(error);
 });
-
-
-
-
-// export data using d3 csv promise
-d3.csv("assets/data/data.csv").then(function(data) {
-
-  console.log(data);
-
-  data.forEach(row => {
-      row.poverty = +row.poverty;
-      row.income = +row.income;
-      row.healthcare = + row.healthcare;
-      row.obesity = + row.obesity;
-      row.smokes = + row.smokes;
-      row.age = + row.age;
-  });
-
-
-
-
-
-
-}).catch(function(error) {
-    console.log(error);
-  });
