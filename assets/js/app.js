@@ -101,25 +101,64 @@ function renderCircles(circlesGroup, newXscale, newYscale, chosenXaxis, chosenYa
   return circlesGroup;
 }
 
-
+//    row.poverty = +row.poverty;
+// row.age = + row.age;
+//       row.income = +row.income;
+//       row.healthcare = + row.healthcare;
+// row.smokes = + row.smokes;
+//       row.obesity = + row.obesity;
+//       
+//       
 
 // update tooltip for circles
-function updateToolTip(chosenXAxis, circlesGroup) {
+function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
 
-  var label;
+  var labelX;
+  var labelY;
+  switch (chosenXaxis) {
+    case "poverty":
+      labelX = "In Poverty (%)";
+      break;
+    
+    case "age":
+      labelX = "Age (Median)";
+      break;
 
-  if (chosenXAxis === "hair_length") {
-    label = "Hair Length:";
+    case "income":
+      labelX = "Household Income (Median)";
+      break;
   }
-  else {
-    label = "# of Albums:"; // label inside the tooltip, not axis label
+
+  switch (chosenYaxis) {
+    case "healthcare":
+      labelY = "Lacks Healthcare (%)";
+      break;
+    
+    case "smokes":
+      labelY = "Smokes (%)";
+      break;
+
+    case "obesity":
+      labelY = "Obesity (%)";
+      break;
   }
+
+  // if (chosenXAxis === "hair_length") {
+  //   label = "Hair Length:";
+  // }
+  // else {
+  //   label = "# of Albums:"; // label inside the tooltip, not axis label
+  // }
 
   var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([80, -60])
-    .html(function(d) {
-      return (`${d['rockband']}<hr>${label} ${d[chosenXAxis]}`);
+    .html(function(row) {
+      return (`
+        ${row['state']}<hr>
+        ${labelX}: ${row[chosenXaxis]}<br>
+        ${labelX}: ${row[chosenYaxis]}
+      `);
     });
 
   circlesGroup.call(toolTip);
