@@ -224,73 +224,57 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .attr("r", 10)
     .attr("fill", "blue")
     .attr("opacity", ".8");
-
+  // specify label starting position and spacing
+  var labelStartPos = 1.5; // rem unit
+  var labelSpacing = 1.2; // rem unit
   // --------- Create group for 3 x-axis labels ------------
   var labelsGroupX = chartGroup.append("g")
-  // position of the axis labels
-    .attr("transform", `translate(${width / 2}, ${height + 17})`);
+  // position of the xAxis labels
+    .attr("transform", `translate(${width / 2}, ${height})`);
 
   // add text label to the labelsGroup
   var povLabel = labelsGroupX.append("text")
-    .attr("x", 0)
-    .attr("y", 20)
+    .attr("y", `${labelStartPos}rem`)
     .attr("value", "poverty") // value to grab for event listener
     .classed("active", true)
     .text("In Poverty (%)");
 
   var ageLabel = labelsGroupX.append("text")
-    .attr("x", 0)
-    .attr("y", 40)
+    .attr("y", `${labelStartPos + labelSpacing}rem`)
     .attr("value", "age") // value to grab for event listener
     .classed("inactive", true)
     .text("Age (Median)");
   
   var incomeLabel = labelsGroupX.append("text")
-  .attr("x", 0)
-  .attr("y", 60)
+  .attr("y", `${labelStartPos + 2*labelSpacing}rem`)
   .attr("value", "income") // value to grab for event listener
   .classed("inactive", true)
   .text("Household Income (Median)");
 
   // --------- Create group for 3 y-axis labels ------------
-  // append y axis
-  // chartGroup.append("text")
-  //   .attr("transform", "rotate(-90)")
-  //   .attr("y", 0 - margin.left) //
-  //   .attr("x", 0 - (height / 2))
-  //   .attr("dy", "2rem")
-  //   .classed("axis-text", true)
-  //   .text("Number of Billboard 500 Hits");
-    // specify the spacing between different axis labels for both x & y
-
   var labelsGroupY = chartGroup.append("g")
-    // rotate yAxis label CCW 90-deg
-    .attr("transform", "rotate(-90)");
+    // move the label origin to mid yAxis and rotate yAxis label CCW 90-deg
+    .attr("transform", `translate(0, ${height / 2}) rotate(-90)`);
+    /*
+    the order of attributes in the transform statement does matter, the below is equivalent
+    .attr("transform", `rotate(-90) translate(${-height/2}, 0)`);
+    */
     
     // add text label to the labelsGroup
   var healthCareLabel = labelsGroupY.append("text")
-    .attr("x", 0 - height / 2)
-    .attr("y", 0)
+    .attr("y", `${-labelStartPos}rem`)
     .attr("value", "healthCare") // value to grab for event listener
     .classed("active", true)
-    .text("Lacks Healthcare (%)")
-        //   .attr("y", 0 - margin.left) //
-  //   .attr("x", 0 - (height / 2))
-    .attr("dy", "2rem")
-  //   .classed("axis-text", true)
-  //   .text("Number of Billboard 500 Hits");
-;
+    .text("Lacks Healthcare (%)");
   
   var smokeLabel = labelsGroupY.append("text")
-    .attr("x", 0)
-    .attr("y", 40)
+    .attr("y", `${-labelStartPos - labelSpacing}rem`)
     .attr("value", "smoke") // value to grab for event listener
     .classed("inactive", true)
     .text("Smokes (%)");
     
   var obesseLabel = labelsGroupY.append("text")
-    .attr("x", 0)
-    .attr("y", 60)
+    .attr("y", `${-labelStartPos - 2*labelSpacing}rem`)
     .attr("value", "obesse") // value to grab for event listener
     .classed("inactive", true)
     .text("Obesse (%)");
