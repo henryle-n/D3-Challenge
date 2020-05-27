@@ -7,7 +7,14 @@ var width;
 var height;
 var svg;
 var chartGroup;
-var transDura = 800; // unit = ms
+var transDura = 800; // unit = ms :: transition Time between new data
+var scaleMin = 15; // percentage ::  axis value extension beyond dataset min value 
+var scaleMax = 10; // percentage ::  axis value extension beyond dataset max value
+
+// specify label starting position and spacing
+var labelStartPos = 2.2; // rem unit
+var labelSpacing = 1.3; // rem unit
+
 
 // ============== SVG CREATTION ==================
 // get current user window size for svg scaling
@@ -17,8 +24,8 @@ svgHeight = window.innerHeight;
 margin = {
   top: 70,
   right: 124,
-  bottom: 70,
-  left: 124
+  bottom: 70 + 30,
+  left: 124 + 30
   };
 
 width = svgWidth - margin.left - margin.right;
@@ -53,8 +60,8 @@ function xScale(demoData, chosenXaxis) {
     // scale so that min of the axis is 20% extended beyond original data
     // max is 20% more than original
     .domain([
-      d3.min(demoData, d => d[chosenXaxis]) * 0.9,
-      d3.max(demoData, d => d[chosenXaxis]) * 1.1
+      d3.min(demoData, d => d[chosenXaxis]) * (1 - scaleMin/100),
+      d3.max(demoData, d => d[chosenXaxis]) * (1 + scaleMax/100 )
     ])
     .range([0, width]);
   return xLinearScale;
@@ -67,8 +74,8 @@ function yScale(demoData, chosenYaxis) {
     // scale so that min of the axis is 20% extended beyond original data
     // max is 20% more than original
     .domain([
-      d3.min(demoData, d => d[chosenYaxis]) * 0.9,
-      d3.max(demoData, d => d[chosenYaxis]) * 1.1
+      d3.min(demoData, d => d[chosenYaxis]) * (1 - scaleMin/100),
+      d3.max(demoData, d => d[chosenYaxis]) * (1 + scaleMax/100 )
     ])
     .range([height, 0]);
   return yLinearScale;
@@ -103,15 +110,6 @@ function renderCircles(circlesGroup, newXscale, newYscale, chosenXaxis, chosenYa
   return circlesGroup;
 }
 
-//    row.poverty = +row.poverty;
-// row.age = + row.age;
-//       row.income = +row.income;
-//       row.healthcare = + row.healthcare;
-// row.smokes = + row.smokes;
-//       row.obesity = + row.obesity;
-//       
-//       
-
 // update tooltip for circles
 function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
 
@@ -119,48 +117,64 @@ function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
   var labelY;
   switch (chosenXaxis) {
     case "poverty":
-      labelX = "In Poverty (%)";
+      labelX = "Poverty";
       break;
     
     case "age":
-      labelX = "Age (Median)";
+      labelX = "Age";
       break;
 
     case "income":
-      labelX = "Household Income (Median)";
+      labelX = "Income";
       break;
   }
 
   switch (chosenYaxis) {
     case "healthcare":
-      labelY = "Lacks Healthcare (%)";
+      labelY = "Lacks Healthcare";
       break;
     
     case "smokes":
-      labelY = "Smokes (%)";
+      labelY = "Smokes";
       break;
 
     case "obesity":
-      labelY = "Obesity (%)";
+      labelY = "Obesity";
       break;
   }
 
-  // if (chosenXaxis === "hair_length") {
-  //   label = "Hair Length:";
-  // }
-  // else {
-  //   label = "# of Albums:"; // label inside the tooltip, not axis label
-  // }
-
   var toolTip = d3.tip()
     .attr("class", "tooltip")
-    .offset([0, 0])
+    .offset([-10, 0])
     .html(function(row) {
-      return (`
-        ${row['state']}<hr>
-        ${labelX}: ${row[chosenXaxis]}<br>
-        ${labelY}: ${row[chosenYaxis]}
-      `);
+      if (chosenXaxis === "income"){
+        return (`
+          ${row['state']}<br>
+          -------------------------<br>
+          ${labelX}: 
+            <span style='color:#59DCE5'>
+              $${Math.max(Math.round(row[chosenXaxis] * 100)/100).toFixed(2)}K
+            </span>
+            <br>
+          ${labelY}: 
+            <span style='color:#59DCE5'>
+              ${row[chosenYaxis]}%
+            </span>
+        `);}
+      else
+        return (`
+          ${row['state']}<br>
+          -------------------------<br>
+          ${labelX}:
+          <span style="color:#59DCE5">
+            ${row[chosenXaxis]}%
+          </span>  
+          <br>
+          ${labelY}: 
+          <span style="color:#59DCE5">
+            ${row[chosenYaxis]}%
+          </span>
+        `);
     });
 
   circlesGroup.call(toolTip);
@@ -185,7 +199,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
   // parse data
   demoData.forEach(row => {
     row.poverty = +row.poverty;
-    row.income = +row.income;
+    row.income = +row.income/1000;
     row.healthcare = + row.healthcare;
     row.obesity = + row.obesity;
     row.smokes = + row.smokes;
@@ -211,12 +225,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
   .classed("y-axis", true)
   .call(leftAxis);
 
-
-  // append and show y axis
-  // chartGroup.append("g")
-  //   .call(leftAxis);
-
-  // append initial circles
+  // create initial circles
   var circlesGroup = chartGroup.selectAll("circle")
     .data(demoData)
     .enter()
@@ -224,11 +233,10 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .attr("cx", d => xLinearScale(d[chosenXaxis]))
     .attr("cy", d => yLinearScale(d[chosenYaxis]))
     .attr("r", 10)
-    .attr("fill", "blue")
-    .attr("opacity", ".8");
-  // specify label starting position and spacing
-  var labelStartPos = 1.5; // rem unit
-  var labelSpacing = 1.2; // rem unit
+    .attr("fill", "#a52875")
+    .attr("opacity", ".5");
+
+
   // --------- Create group for 3 x-axis labels ------------
   var labelsGroupX = chartGroup.append("g")
   // position of the xAxis labels
@@ -245,22 +253,19 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .attr("y", `${labelStartPos + labelSpacing}rem`)
     .attr("value", "age") // value to grab for event listener
     .classed("inactive", true)
-    .text("Age (Median)");
+    .text("Age, yrs (Median)");
   
   var incomeLabel = labelsGroupX.append("text")
   .attr("y", `${labelStartPos + 2*labelSpacing}rem`)
   .attr("value", "income") // value to grab for event listener
   .classed("inactive", true)
-  .text("Household Income (Median)");
+  .text("Household Income, $1K (Median)");
 
   // --------- Create group for 3 y-axis labels ------------
   var labelsGroupY = chartGroup.append("g")
     // move the label origin to mid yAxis and rotate yAxis label CCW 90-deg
-    .attr("transform", `translate(0, ${height / 2}) rotate(-90)`);
-    /*
-    the order of attributes in the transform statement does matter, the below is equivalent
     .attr("transform", `rotate(-90) translate(${-height/2}, 0)`);
-    */
+    
     
     // add text label to the labelsGroup
   var healthCareLabel = labelsGroupY.append("text")
@@ -295,8 +300,6 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
 
         // replaces chosenXaxis with value
         chosenXaxis = value;
-
-        console.log(chosenXaxis)
 
         // updates x & y scale for new data
         xLinearScale = xScale(demoData, chosenXaxis);
@@ -359,8 +362,6 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
 
         // replaces chosenXaxis with value
         chosenYaxis = value;
-
-        console.log(chosenYaxis)
 
         // updates x & y scale for new data
         xLinearScale = xScale(demoData, chosenXaxis);
