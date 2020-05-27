@@ -156,6 +156,7 @@ function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
               $${Math.max(Math.round(row[chosenXaxis] * 100)/100).toFixed(2)}K
             </span>
             <br>
+
           ${labelY}: 
             <span style='color:#59DCE5'>
               ${row[chosenYaxis]}%
@@ -170,6 +171,7 @@ function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
             ${row[chosenXaxis]}%
           </span>  
           <br>
+
           ${labelY}: 
           <span style="color:#59DCE5">
             ${row[chosenYaxis]}%
@@ -235,6 +237,14 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .attr("r", 10)
     .attr("fill", "#a52875")
     .attr("opacity", ".5");
+    // .attr("label", d=>d['abbr']);
+    
+    // circlesGroup.append("text")
+    // .attr("x", d => xLinearScale(d[chosenXaxis]-1))
+    // .attr("y", d => yLinearScale(d[chosenYaxis]-1))
+    // .text(d=>d.abbr);
+
+    // circlesGroup.append("text")attr(demoData['abbr']);
 
 
   // --------- Create group for 3 x-axis labels ------------
