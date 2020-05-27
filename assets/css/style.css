@@ -1,36 +1,42 @@
-.iframeContainer {
-  padding: 20px;
-  border: 1px solid #e3e3e3;
-}
-
 /* Sticky Footer rules (https://getbootstrap.com/examples/sticky-footer/) */
 html {
-  position: relative;
+  position: absolute;
   min-height: 100%;
 }
 
 body {
   /* Padding bottom by footer height */
-  padding-bottom: 80px;
+  padding-bottom: 8rem;
 }
+
 
 #footer {
   position: absolute;
   bottom: 0;
-  width: 100%; /* Set the fixed height of the footer here */
-  height: 10px;
-  padding-top: 20px;
-  padding-bottom: 40px;
+  height: 6rem;
+  width: 100%; 
+  padding: 20px;
   text-align: center;
   background-color: #6d0536;
   opacity: 0.7;
   color: antiquewhite ;
-  font-weight: 700;
+  font-weight: 500;
+  line-height: 0.5rem;
 }
 
-#footer p {
-  margin: 0;
+
+.footer1 {
+  color: rgb(68, 212, 234);
+  font-size: 20px;
+}
+
+.footer2 {
   font-size: 16px;
+}
+
+.footer3 {
+  font-size: 17px;
+  color: azure;
 }
 
 
@@ -51,12 +57,6 @@ body {
   border-radius: 1rem;
 }
 
-/* .axis-text {
-  font-family: sans-serif;
-  font-weight: bold;
-  fill: #551aaf;
-  text-anchor: middle;
-} */
 
 text.active {
   font-weight: bold;
@@ -77,3 +77,16 @@ text.inactive:hover {
   cursor: pointer;
 }
 
+text.circLabel {
+  display: inline;
+  font-size: 10px;
+  text-anchor: middle;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  color: aliceblue;
+}
+
+#author {
+  font-size: 1.1rem;
+  text-align: right;
+}
