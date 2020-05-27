@@ -329,7 +329,6 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .on("click", function() {
       // get value of selection
       var value = d3.select(this).attr("value");
-      console.log("You clicked on :: ", this);
       if (value !== chosenXaxis) {
 
         // replaces chosenXaxis with value
