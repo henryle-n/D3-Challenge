@@ -5,31 +5,60 @@ var svgHeight;
 var margin;
 var width;
 var height;
-var svg;
+var svgArea;
 var chartGroup;
 var transDura = 800; // unit = ms :: transition Time between new data
 var scaleMin = 15; // percentage ::  axis value extension beyond dataset min value 
 var scaleMax = 10; // percentage ::  axis value extension beyond dataset max value
 
 // specify label starting position relative to origin and spacing out between labels of the same axis
-var labelStartPos = 2.2; // rem unit
+var labelStartPos = 3; // rem unit
 var labelSpacing = 1.3; // rem unit
 
 // circular datapoint radius
 var circleRadius = 12;
 
+// default axes upon page loading
+var chosenXaxis = "poverty";
+var chosenYaxis = "healthcare";
+
+var body = document.body;
+var html = document.documentElement;
+
 
 
 // ============== SVG CREATTION ==================
 // get current user window size for svg scaling
-svgWidth = window.innerWidth;
-svgHeight = window.innerHeight*3/4;
+// svgWidth = window.innerWidth;
+// svgHeight = window.innerHeight*3/4;
+
+// margin = {
+//   top: svgHeight*0.05,
+//   right: svgWidth*0.2,
+//   bottom: svgHeight*0.27,
+//   left: svgWidth*0.2
+//   };
+
+// width = svgWidth - margin.left - margin.right;
+// height = svgHeight - margin.top - margin.bottom;
+
+
+svgWidth = Math.min(body.scrollWidth, body.offsetWidth,html.clientWidth, html.scrollWidth, html.offsetWidth, window.innerWidth, d3.select("#scatter").node().getBoundingClientRect().width);
+  
+
+
+if (svgWidth>=768){
+  svgHeight = window.innerHeight*4/7;
+}
+else 
+  svgHeight = svgWidth;
+
 
 margin = {
-  top: svgHeight*0.05,
-  right: svgWidth*0.2,
-  bottom: svgHeight*0.27,
-  left: svgWidth*0.2
+  top: 20,
+  right: 50,
+  bottom: 100,
+  left: 130
   };
 
 width = svgWidth - margin.left - margin.right;
@@ -37,9 +66,14 @@ height = svgHeight - margin.top - margin.bottom;
 
 
 // create svg wrapper 
-var svgArea = d3.select("body").select("#scatter");
+var scatter = d3.select("body").select("#scatter");
 
-svgArea
+if (svgArea && !svgArea.empty()) {
+  svgArea.remove();
+  console.log("deleted existing svgArea");
+}
+
+svgArea = scatter
 .append("svg")
 .attr("width", svgWidth)
 .attr("height", svgHeight)
@@ -50,9 +84,7 @@ chartGroup = d3.select("svg").append("g")
 .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
-// default axes upon page loading
-var chosenXaxis = "poverty";
-var chosenYaxis = "healthcare";
+
 
 // =============== SCALING AXES =================
 function xScale(demoData, chosenXaxis) {
@@ -229,18 +261,16 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
   // Create initial axis functions
   var bottomAxis = d3.axisBottom(xLinearScale);
   var leftAxis = d3.axisLeft(yLinearScale);
-
+  // console.log("This is bottom axis :: ", chartGroup.call(bottomAxis));
   // append and show x & y axes
   var xAxis = chartGroup.append("g")
-    .classed("x-axis", true)
+    .attr("id", "axisText")
     .attr("transform", `translate(0, ${height})`)
-    .attr("stroke", "#179C82")
     .call(bottomAxis);
 
   var yAxis = chartGroup.append("g")
-  .classed("y-axis", true)
-  .attr("stroke", "#179C82")
-  .call(leftAxis);
+    .attr("id", "axisText")
+    .call(leftAxis)
 
   // create initial circles
   var circlesGroup = chartGroup.selectAll("circle")
@@ -249,9 +279,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .append("circle")
     .attr("cx", data => xLinearScale(data[chosenXaxis]))
     .attr("cy", data => yLinearScale(data[chosenYaxis]))
-    .attr("r", circleRadius)
-    .attr("fill", "#a52875")
-    .attr("opacity", ".5");
+    .attr("r", circleRadius);
 
   // create initial circles
   var circLabelGroup = chartGroup.selectAll(".circLabel")
@@ -261,7 +289,7 @@ d3.csv("assets/data/data.csv").then(function(demoData, err) {
     .classed("circLabel", true)
     .attr("x", data => xLinearScale(data[chosenXaxis]))
     .attr("y", data => yLinearScale(data[chosenYaxis]))
-    .attr("dy", 4)
+    .attr("dy", 3.5)
     .text(data => data.abbr);
 
 
