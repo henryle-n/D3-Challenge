@@ -10,7 +10,8 @@ var chartGroup;
 var transDura = 800; // unit = ms :: transition Time between new data
 var scaleMin = 15; // percentage ::  axis value extension beyond dataset min value 
 var scaleMax = 10; // percentage ::  axis value extension beyond dataset max value
-
+var toolTip;
+var toolTipArea;
 // specify label starting position relative to origin and spacing out between labels of the same axis
 var labelStartPos = 3; // rem unit
 var labelSpacing = 1.3; // rem unit
@@ -145,7 +146,12 @@ function renderCirLabel(circLabelGroup, newXscale, newYscale, chosenXaxis, chose
 
 // ================= UPDATE TOOLTIPS ===================
 function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
+  toolTipArea = d3.selectAll("div.tooltip");
 
+  // delete existing tootip and update to new tooltip
+  refreshSVG(toolTipArea);
+
+  // define label(key) for tooltip content box
   var labelX;
   var labelY;
 
@@ -179,11 +185,10 @@ function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
   }
 
   // use d3.tip to construct tooltips
-  var toolTip = d3.tip()
+  toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([-10, 0])
     .html(function (row) {
-
       // income has different unit
       if (chosenXaxis === "income") {
         return (`
