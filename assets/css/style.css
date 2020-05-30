@@ -59,7 +59,7 @@ body {
 }
 
 
-.active {
+text.active {
   font-weight: bold;
   fill: #2d1ad4;
   transition: fill 0.3s ease-out;
@@ -67,24 +67,25 @@ body {
   font-size: larger;
 }
 
-.inactive {
+text.inactive {
   fill: #8c8c97be;
   transition: fill 0.3s ease-out;
   text-anchor: middle;
   font-size: 1.0rem;
 }
 
-.inactive:hover {
+text.inactive:hover {
   fill: #e75480;
   cursor: pointer;
   transition: fill 0.1s ease-out;
+  font-size: larger;
 }
 
-.circLabel {
+text.circLabel {
   font-size: 10px;
   text-anchor: middle;
   font-family: sans-serif;
-  stroke: rgb(75, 144, 128);
+  stroke: rgb(6, 164, 185);
   stroke-width: 0.3;
 }
 
@@ -111,29 +112,86 @@ path.domain {
 }
 
 
+/* format the svg container (canvas size), content & rect area */
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  max-width: 1204px;
+  max-height: 637px;
+  padding-bottom: 110%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+
+
+.svg-content-responsive {
+  display: inline;
+  position: absolute;
+  padding-bottom: 0%;
+  top: 10px;
+  left: 0;
+}
+
+svg .rect {
+  fill: gold;
+  stroke: steelblue;
+  stroke-width: 5px;
+}
+
+
 @media screen and (max-width: 3000px) {
   .jumbotron {
     transform: scale(1);
   }
 }
 
-@media screen and (max-width: 600px) {
-  .container {
-    transform: scale(0.85);
+@media screen and (max-width: 1000px) {
+  #axisText {
+    font-size: 14px;
+  }
+
+  text.active {
+    font-weight: bold;
+    fill: #2d1ad4;
+    transition: fill 0.3s ease-out;
+    text-anchor: middle;
+    font-size: larger;
+  }
+  
+  text.inactive {
+    fill: #8c8c97be;
+    transition: fill 0.3s ease-out;
+    text-anchor: middle;
+    font-size: 0.8rem;
+  }
+  
+  text.inactive:hover {
+    fill: #e75480;
+    cursor: pointer;
+    transition: fill 0.1s ease-out;
+    font-size: larger;
+  }
+
+}
+
+
+@media screen and (max-width: 900px) {
+  text.circLabel {
+    display: none;
   }
 }
 
 /* Mobile Rules */
-@media screen and (max-width: 550px) {
-  .circLabel {
-    display: none;
-  }
-
+@media screen and (max-width: 767px) {
   #axisText {
     font-size: 14px;
   }
-}
 
+  text.circLabel {
+    display: inline;
+  }
+}
 
 @media screen and (max-width: 400px) {
   #axisText {
@@ -142,5 +200,19 @@ path.domain {
 
   .container {
     transform: scale(0.9);
+  }
+
+  #footer {
+    position: absolute;
+    bottom: 0;
+    height: 6rem;
+    width: 100%; 
+    padding: 20px;
+    text-align: center;
+    background-color: #6d0536;
+    opacity: 0.7;
+    color: antiquewhite ;
+    font-weight: 500;
+    line-height: 0.5rem;
   }
 }
