@@ -37,12 +37,6 @@ function createSVG() {
 
   // find svgHeight & Width upon loading based on container current size
   svgWidth = Math.min(
-    // body.scrollWidth,
-    // body.offsetWidth,
-    // html.clientWidth,
-    // html.scrollWidth,
-    // html.offsetWidth,
-    // window.innerWidth,
     d3.select("#scatter").node().getBoundingClientRect().width
   );
 
