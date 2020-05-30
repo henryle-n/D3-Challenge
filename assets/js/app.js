@@ -27,14 +27,14 @@ var body = document.body,
   html = document.documentElement;
 
 // ============== SVG CREATTION ==================
-function refreshSVG(svg) {
-  if (svg && !svg.empty()) {
-    svg.remove();
+function refreshExistElemt(element) {
+  if (element && !element.empty()) {
+    element.remove();
   }
 }
 
 function createSVG() {
-  refreshSVG(svgArea);
+  refreshExistElemt(svgArea);
 
   // find svgHeight & Width upon loading based on container current size
   svgWidth = Math.min(
@@ -149,7 +149,7 @@ function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
   toolTipArea = d3.selectAll("div.tooltip");
 
   // delete existing tootip and update to new tooltip
-  refreshSVG(toolTipArea);
+  refreshExistElemt(toolTipArea);
 
   // define label(key) for tooltip content box
   var labelX;

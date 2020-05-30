@@ -109,7 +109,7 @@ var articleGroup;
 function getAnalysis (xAxis, yAxis) {
 
     // clear previous Data Analysis section
-    refreshSVG(articleGroup);
+    refreshExistElemt(articleGroup);
 
     // create new article Group
     articleGroup = d3.select(".article").append("span");
