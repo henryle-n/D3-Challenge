@@ -148,6 +148,8 @@ function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
 
   var labelX;
   var labelY;
+
+  // these switch will help build the keys for tooltip box when hovering over the data and tag
   switch (chosenXaxis) {
     case "poverty":
       labelX = "Poverty";
@@ -176,10 +178,13 @@ function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
       break;
   }
 
+  // use d3.tip to construct tooltips
   var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([-10, 0])
     .html(function (row) {
+
+      // income has different unit
       if (chosenXaxis === "income") {
         return (`
           ${row['state']}<br>
@@ -196,6 +201,8 @@ function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
             </span>
         `);
       } 
+      
+      // age has different unit
       else if (chosenXaxis === "age") {
         return (`
           ${row['state']}<br>
@@ -212,6 +219,8 @@ function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
           </span>
         `);
       }
+
+      // all other have % unit
       else
         return (`
           ${row['state']}<br>
@@ -228,9 +237,11 @@ function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
           </span>
         `);
     });
-
+  
+  // add tooltip to chart circles and state text
   elementGroup.call(toolTip);
 
+  // mouse event listener to show tooltip when hovering mouse over the circles or state text
   elementGroup.on("mouseover", function (tTip) {
       toolTip.show(tTip);
     })
@@ -246,7 +257,7 @@ function updateToolTip(chosenXaxis, chosenYaxis, elementGroup) {
 // Retrieve data from the CSV file and execute everything below
 function initChart() {
   
-  // call back to crete svg canvas
+  // call back to create svg canvas
   createSVG();
 
   d3.csv("assets/data/data.csv").then(function (demoData, err) {
@@ -270,7 +281,7 @@ function initChart() {
     // Create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
-    // console.log("This is bottom axis :: ", chartGroup.call(bottomAxis));
+
     // append and show x & y axes
     var xAxis = chartGroup.append("g")
       .attr("id", "axisText")
@@ -290,7 +301,7 @@ function initChart() {
       .attr("cy", data => yLinearScale(data[chosenYaxis]))
       .attr("r", circleRadius);
 
-    // create initial circles
+    // create initial circle labels === state abbr text
     var circLabelGroup = chartGroup.selectAll(".circLabel")
       .data(demoData)
       .enter()
@@ -331,7 +342,7 @@ function initChart() {
       // rotate yAxis label CCW 90-deg and move the label origin to mid yAxis  
       .attr("transform", `rotate(-90) translate(${-height/2}, 0)`);
 
-    // add text label to the labelsGroup
+    // add text labels to the labelsGroup
     var healthCareLabel = labelsGroupY.append("text")
       .attr("y", `${-labelStartPos}rem`)
       .attr("value", "healthcare")
@@ -360,6 +371,7 @@ function initChart() {
     // updateToolTipState function above csv import
     var circLabelGroup = updateToolTip(chosenXaxis, chosenYaxis, circLabelGroup);
 
+    // call back function to show analysis of the chosen X & Y catergories
     getAnalysis (chosenXaxis, chosenYaxis);
 
 
@@ -500,12 +512,14 @@ function initChart() {
                 .classed("inactive", false);
               break;
           }
-
+          // call back function to show analysis of the chosen X & Y catergories
           getAnalysis (chosenXaxis, chosenYaxis);
 
         }
       });
   })
+
+  // log any error while pulling promises
   .catch(function (err) {
     console.log("Error(s) while running Promise :: ", err);
   })
