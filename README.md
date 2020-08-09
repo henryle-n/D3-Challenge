@@ -5,7 +5,7 @@ Everyone has their own definitions of and goals towards this dream & what makes 
 By visualizing data, the relationship between different contributing factors to the nation prosperity & human health is to be revealed.
 
 ## Features Overview
-### 6-Axis Rendered Simulatneously
+### 6-Axis Rendered Simulatneously with Dynamic Data Analysis
 <div align="center">
     <img src="assets/img/responsiveAxes.gif"/>
 </div>
