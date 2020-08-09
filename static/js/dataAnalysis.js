@@ -1,6 +1,6 @@
 
 const analysisMaster = {
-    // Poverty vs. ?
+    // Poverty vs. X?
     "PovertyHealthcare" :
         "There is a clear proportional increasing relationship/ trend between Poverty (%) and Lacks Healthcare (%). The higher the poverty, the higher the lack of healthcare, which makes sense as people may not be able to afford expensive health coverage.\
         <br><br> Other observations include:<br>\
@@ -31,7 +31,7 @@ const analysisMaster = {
         </ul>\
         <hr>",
 
-    // Age vs. ?
+    // Age vs. X?
     "AgeHealthcare": 
         "Upon analyzing the data, there isn't a clear trend/ relationship. It seems to have two different trends: one trend is a proportional relationship and the other is the opposite. However, majority of the data follows the inversely proportional relationship/ trend. Thus, this could be intepreted as the main trend: the younger lacks healthcare more.\
         <br><br> Other observations include:<br>\
@@ -64,7 +64,7 @@ const analysisMaster = {
         <hr>",
 
 
-    // Household Income vs. ?
+    // Household Income vs. X?
     "IncomeHealthcare" :
         "Data is spreaded out widely. However, there is a good inversely proportional relationship/ trend between <em>Household ($) vs. Lacks Healthcare (%)</em>, which makes sense as the lower the income is, the less likelihood that people would buy expensive health coverage.\
         <br><br> Other observations include:<br>\
