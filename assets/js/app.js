@@ -124,6 +124,13 @@ function renderYaxis(newYscale, yAxis) {
 // create/ update circular data points on graph
 function renderCircles(circlesGroup, newXscale, newYscale, chosenXaxis, chosenYaxis) {
 
+  console.log(" 185 circ rend the chosen xAxis is :: ", chosenXaxis);
+  console.log(" 186 circ rend the chosen yAxis is :: ", chosenYaxis);
+  console.log(" 187 circlesGroup is :: ", circlesGroup);
+  console.log(" 188 newYscale is :: ", newXscale);
+  console.log(" 189 newXscale is :: ", newYscale);
+
+
   circlesGroup.transition()
     .duration(transDura)
     .attr("cx", data => newXscale(data[chosenXaxis]))
@@ -267,7 +274,7 @@ function initChart() {
 
   d3.csv("assets/data/data.csv").then(function (demoData, err) {
     if (err) throw err;
-
+    console.log("this is demoData", demoData);
     // parse data
     demoData.forEach(row => {
       row.poverty = +row.poverty;
@@ -277,7 +284,8 @@ function initChart() {
       row.smokes = +row.smokes;
       row.age = +row.age;
     });
-
+    console.log("this is demo data :: ", demoData, demoData[0].state
+    );
     //  x & y linear scale function 
     var xLinearScale = xScale(demoData, chosenXaxis);
     var yLinearScale = yScale(demoData, chosenYaxis);
@@ -285,6 +293,7 @@ function initChart() {
 
     // Create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
+    console.log (" this is bottomAxis Scale :: ", bottomAxis);
     var leftAxis = d3.axisLeft(yLinearScale);
 
     // append and show x & y axes
