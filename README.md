@@ -31,7 +31,7 @@ Deployed thru GitHub IO and can be accessed <a href="https://henryle-n.github.io
 
 # 4. Languages, Tools & Techniques
 * **Languages:**
-    * HTML | CSS | JavaScript | Markdown
+    * HTML 5 | CSS 3 | JavaScript (ECMAScript 6) | Markdown
 * **Libraries & Modules:**
     * Scalable Vector Graphics (SVG)
     * D3.js
@@ -43,7 +43,7 @@ Deployed thru GitHub IO and can be accessed <a href="https://henryle-n.github.io
 * **Software & Apps:**
     * Visual Studio
 * **Operating System:**
-    * Windows 10 Pro, ver. 1909
+    * Windows 10 Pro v1909
 
 # 5. Highlights post-Data-Analysis
 * TX has the highest uninsured people which occupies 25% of its total population.
