@@ -41,7 +41,7 @@ Deployed thru GitHub IO and can be accessed <a href="https://henryle-n.github.io
     * Scatter Plot with Circle-SVG
     * Tooltips
 * **Software & Apps:**
-    * Visual Studio
+    * Visual Studio Code v1.47.3 | Google Chrome v84.0.4147.125
 * **Operating System:**
     * Windows 10 Pro v1909
 
